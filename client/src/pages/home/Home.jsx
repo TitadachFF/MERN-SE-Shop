@@ -1,7 +1,7 @@
 import React from "react";
 import Banner from "../../components/Banner";
 import Category from "./Categories";
-import OutServices from "./OutServices";
+import OurServices from "./OurServices";
 import SpecialProducts from "./SpecialProducts";
 import Testimonials from "./Testimonials";
 const Home = () => {
@@ -11,7 +11,7 @@ const Home = () => {
       <Category />
       <SpecialProducts />
       <Testimonials />
-      <OutServices />
+      <OurServices />
     </div>
   );
 };
