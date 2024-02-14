@@ -182,5 +182,13 @@
     "price": 22.22,
     "image": "https://source.unsplash.com/random/800x600/?popula-organizer",
     "category": "popular"
+  },
+  {
+    "_id": "24",
+    "name": "เสื้ออภิชาติฟาร์ม",
+    "description": "คนเล่นเขารู้กัน",
+    "price": 99999,
+    "image": "https://laz-img-sg.alicdn.com/p/26402ad912f29c7208764add06a77a3d.jpg",
+    "category": "bangsean"
   }
 ]

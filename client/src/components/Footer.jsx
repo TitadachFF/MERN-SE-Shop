@@ -2,12 +2,8 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="footer p-10 bg-base-300 text-base-content">
-      <img
-        src="/logo.png"
-        className="w-[120px] shadow-2xl rounded-full h-[120px]"
-        alt=""
-      />
+    <footer className="mt-[110px] footer p-10 bg-base-300 text-base-content max-w-screen-2xl  mx-auto">
+      <img src="/logo.png" className="w-[120px] " alt="" />
       <nav>
         <h6 className="footer-title">Services</h6>
         <a className="link link-hover">Branding</a>

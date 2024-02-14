@@ -24,6 +24,7 @@ const categoryItems = [
     description: "(26 items)",
     image: "/images/home/category/img4.jpg",
   },
+
 ];
 const Categories = () => {
   return (
