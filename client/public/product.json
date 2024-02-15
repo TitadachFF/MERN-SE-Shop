@@ -190,5 +190,13 @@
     "price": 99999,
     "image": "https://laz-img-sg.alicdn.com/p/26402ad912f29c7208764add06a77a3d.jpg",
     "category": "bangsean"
+  },
+  {
+    "_id": "25",
+    "name": "รองเท้าฟิบปลอบ",
+    "description": "ไว้สำหรับทรงเอ",
+    "price": 9999,
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmaTtBQKyYpu6eQxbznbXnv3lkqUECMFnQKvewj5DlBg&s",
+    "category": "bangsean"
   }
 ]

@@ -25,15 +25,21 @@ const ProductList = () => {
     fetchData();
   }, []);
   const filterItems = (category) => {
-    const filtered =
-      category === "all"
-        ? products
-        : products.filter((item) => item.category === category);
-    // setFilteredItems(filtered);
+    let filtered;
+    if (category === "bangsean") {
+      filtered = products.filter((item) => item.category === "bangsean");
+    } else {
+      filtered =
+        category === "all"
+          ? products
+          : products.filter((item) => item.category === category);
+    }
+
     handleSortChange(sortOptions, filtered);
     setSelectedCategory(category);
     setCurrentPage(1);
   };
+
   const handleSortChange = (option, products) => {
     setSortOptions(option);
     let sortedItems = [...products];
@@ -50,10 +56,11 @@ const ProductList = () => {
       case "high-to-low":
         sortedItems.sort((a, b) => b.price - a.price);
         break;
-      case "sean":
-        sortedItems.sort(category);
+      case "bangsean":
+        sortedItems = sortedItems.filter(
+          (item) => item.category === "bangsean"
+        );
         break;
-        
       default:
         sortedItems.sort((a, b) => a.name.localeCompare(b.name));
         break;
@@ -144,7 +151,7 @@ const ProductList = () => {
           return (
             <button
               key={index}
-              className={`mx-1 px-3 py-1 rounded-full ${
+              className={`mx-1 px-5 py-2 rounded-full ${
                 currentPage === index + 1 ? "bg-red text-white" : "bg-gray-200"
               }`}
               onClick={() => {
