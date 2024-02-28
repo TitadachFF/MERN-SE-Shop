@@ -1,11 +1,15 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { FaFacebook, FaGoogle, FaGithub } from "react-icons/fa";
 import { AuthContext } from "../context/AuthProvider";
 
 const Modal = ({ name }) => {
   const { login, signUpWithGoogle } = useContext(AuthContext);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from =  "/shop";
+
   const {
     register,
     handleSubmit,
@@ -18,8 +22,10 @@ const Modal = ({ name }) => {
     login(data.email, data.password)
       .then((result) => {
         const user = result.user;
-        console.log(user);
+        // console.log(user);
         alert("Login Successful");
+        document.getElementById(name).close();
+        navigate(from, { replace: true });
       })
       .catch((error) => {
         console.log(error);
@@ -30,7 +36,7 @@ const Modal = ({ name }) => {
       .then((result) => {
         const user = result.user;
         console.log(user);
-        alert("Google SigUp Successfully");
+        alert("Google SingUp Successfully");
         document.getElementById("login").close();
       })
       .catch((error) => {

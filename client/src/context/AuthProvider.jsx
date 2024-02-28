@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 export const AuthContext = createContext();
 import app from "../firebase/firebase.config";
 import {
@@ -7,8 +7,10 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  onAuthStateChanged,
+  signOut,
+  updateProfile,
 } from "firebase/auth";
-
 const AuthProvider = ({ children }) => {
   // Initialize Firebase Authentication and get a reference to the service
   const auth = getAuth(app);
@@ -17,9 +19,21 @@ const AuthProvider = ({ children }) => {
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
+  const updateUserProfile = ({ name, photoURL }) => {
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+      photoURL: photoURL,
+    });
+  };
+
   const login = (email, password) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
+
+  const logout = () => {
+    return signOut(auth);
+  };
+
   const signUpWithGoogle = () => {
     const provider = new GoogleAuthProvider();
     return signInWithPopup(auth, provider);
@@ -30,8 +44,23 @@ const AuthProvider = ({ children }) => {
     setUser,
     createUser,
     login,
-    signUpWithGoogle
+    logout,
+    signUpWithGoogle,
+    updateUserProfile,
   };
+  //Check if user is Logged in
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        setUser(currentUser);
+      }
+      return () => {
+        return unsubscribe();
+      };
+    });
+  }, [auth]);
+
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
