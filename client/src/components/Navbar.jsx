@@ -53,7 +53,7 @@ const Navbar = () => {
   return (
     <header className="max-w-screen-2xl container mx-auto fixed top-0 left-0 right-0 transition-all duration-300 ease-in-out">
       <div>
-        <div className="navbar bg-base-100 text-neutral-content rounded-b-lg shadow-xl">
+        <div className="navbar bg-base-100 text-neutral-content  shadow-xl">
           <div className="navbar-start">
             <div className="dropdown">
               <div
@@ -86,7 +86,9 @@ const Navbar = () => {
             <a className="btn btn-ghost text-xl text-black" href="/">
               {" "}
               <img src="/logo.png" alt="" className="h-12 pr-1 mx-auto" />
-              <p className="text-red">SE Souvenir Shop</p>
+              <p className="text-black font-semibold ">
+                <span className="text-3xl text-red">SE</span> Souvenir Shop
+              </p>
             </a>
           </div>
           <div className="navbar-center hidden lg:flex">

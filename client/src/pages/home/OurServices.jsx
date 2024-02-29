@@ -52,7 +52,7 @@ const OurServices = () => {
             {serviceList.map((service) => (
               <div
                 key={service.id}
-                className="border h-[230px] shadow-md rounded-sm py-5 px-4 text-center space-y-2 text-red cursor-pointer hover:border hover:border-indigo-600 transition-all duration-200"
+                className="border h-[230px] shadow-md rounded-sm py-5 px-4 text-center space-y-2 text-red cursor-pointer hover:border hover:border-red transition-all duration-200"
               >
                 <img src={service.image} alt="" className="mx-auto h-16" />
                 <h5 className="pt-3 font-semibold">{service.title}</h5>
