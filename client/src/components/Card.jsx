@@ -32,7 +32,11 @@ const Card = ({ item }) => {
         timer: "3000",
       });
       axios.post("http://localhost:5000/carts", cartItem).then(
-        
+        Swal.fire({
+          title: "This product is Added",
+          timer: "700",
+          icon: "success",
+        })
       );
     } else {
       Swal.fire({
