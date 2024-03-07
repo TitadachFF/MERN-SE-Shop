@@ -136,6 +136,7 @@ const ProductList = () => {
             </div>
           </div>
         </div>
+        
         {/* Product Card */}
         <div className="grid md:grid-cols-4 sm:grid-cols-2 grid-col-1 gap-4">
           {currentItems.map((item, index) => (
@@ -143,6 +144,7 @@ const ProductList = () => {
           ))}
         </div>
       </div>
+
       {/* Pagination */}
       <div className="flex justify-center items-center my-8 flex-warp gap-2">
         {Array.from({

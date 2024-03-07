@@ -118,7 +118,7 @@ router.get("/:email", async (req, res) => {
  * @swagger
  * /carts:
  *  post:
- *      summary: Create a new product
+ *      summary: Create a new cart items
  *      tags: [Carts]
  *      requestBody:
  *              required: true
@@ -245,13 +245,13 @@ router.put("/:id", async (req, res) => {
  *              description: The product id
  *      responses:
  *          200:
- *              description: The product is deleted
+ *              description: The cart item is deleted
  *              content:
  *                  application/json:
  *                      schema:
  *                              $ref: '#/components/schemas/Cart'
  *          404:
- *              description: Product not found
+ *              description: cart items not found
  *          500:
  *              description: Some error happened
  */

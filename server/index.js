@@ -23,6 +23,11 @@ const swaggerDefinition = {
       email: "644259010@webmail.npru.ac.th",
     },
   },
+
+  externalDocs: {
+    description: "Download Swagger.json",
+    url: "/swagger.json",
+  },
   servers: [
     {
       url: "http://localhost:5000",
@@ -43,6 +48,10 @@ const CLIENT_URL = process.env.CLIENT_URL;
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.get("/swagger.json", (req, res) => {
+  res.header("Content-Type", "application/json");
+  res.send(swaggerSpec);
+});
 //Database Connection
 const MONGODB_URL = process.env.MONGODB_URL;
 mongoose.connect(MONGODB_URL);

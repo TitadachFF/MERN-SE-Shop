@@ -1,13 +1,58 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Swal from "sweetalert2";
+import { AuthContext } from "../context/AuthProvider";
+import axios from "axios";
 
 const Card = ({ item }) => {
   const { _id, name, image, price, description } = item;
   const [isHeartFilled, setIsHeartFilled] = useState(false);
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate;
+  const location = useLocation;
   const handleHeartClick = () => {
     setIsHeartFilled(!isHeartFilled);
   };
+  const handleAddToCart = (item) => {
+    if (user && user.email) {
+      const cartItem = {
+        productId: item._id,
+        name: item.name,
+        email: user.email,
+        price: item.price,
+        image: item.image,
+        quantity: 1,
+      };
+      Swal.fire({
+        title: "Product added on the cart",
+        position: "center",
+        icon: "success",
+        showConfirmButton: "false",
+        timer: "3000",
+      });
+      axios.post("http://localhost:5000/carts", cartItem).then(
+        
+      );
+    } else {
+      Swal.fire({
+        title: "Please login to add an item to your cart!",
+        position: "center",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        showConfirmButton: true,
+        confirmButtonText: "Login now",
+        timer: "3000",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/login", { state: { from: location } });
+        }
+      });
+    }
+  };
+
   return (
     <div className="card shadow-xl relative mr-5 md:wy-5 h-120  mb-10">
       <div
@@ -39,7 +84,14 @@ const Card = ({ item }) => {
         <p>{description}</p>
         <div className="card-action justify-between items-center mt-2 flex">
           <h5 className="font-semibold">{price}</h5>
-          <button className="btn bg-red text-white mt-2 ">Add to cart</button>
+          <button
+            className="btn bg-red text-white mt-2 "
+            onClick={() => {
+              handleAddToCart(item);
+            }}
+          >
+            Add to cart
+          </button>
         </div>
       </div>
     </div>
