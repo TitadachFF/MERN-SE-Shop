@@ -15,7 +15,7 @@ const AuthProvider = ({ children }) => {
   // Initialize Firebase Authentication and get a reference to the service
   const auth = getAuth(app);
   const [user, setUser] = useState(null);
-
+  const [cartTrigger, setCartTrigger] = useState(0);
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
@@ -47,6 +47,8 @@ const AuthProvider = ({ children }) => {
     logout,
     signUpWithGoogle,
     updateUserProfile,
+    setCartTrigger,
+    cartTrigger,
   };
   //Check if user is Logged in
   useEffect(() => {
