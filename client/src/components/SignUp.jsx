@@ -11,14 +11,14 @@ const SignUp = () => {
   const { createUser } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
-  const from =  "/shop";
+  const from = "/shop";
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
-  
+
   const onSubmit = (data) => {
     createUser(data.email, data.password)
       .then((result) => {

@@ -6,6 +6,9 @@ const productRouter = require("./routes/product.router");
 const cartRouter = require("./routes/cart.router");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const cartRouter = require("./routes/cart.router");
+const userRouter = require("./routes/user.router");
+const jwt = require("jsonwebtoken");
 const swaggerDefinition = {
   openapi: "3.0.0",
   info: {
@@ -40,31 +43,46 @@ const options = {
   // Paths to files containing OpenAPI definitions
   apis: ["./routes/*.js"],
 };
+
 const swaggerSpec = swaggerJSDoc(options);
-//Config .env
+
+//เพื่อเรียกใช้ไฟล์ .env
 dotenv.config();
 const app = express();
 const CLIENT_URL = process.env.CLIENT_URL;
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+app.use(cors({ credentials: true, origin: CLIENT_URL }));
+
 app.use(express.json());
+
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.get("/swagger.json", (req, res) => {
-  res.header("Content-Type", "application/json");
+app.get("/swagger.json", (req,res)=>{
+  res.header("Content-Type","application.json");
   res.send(swaggerSpec);
-});
-//Database Connection
+}
+
+)
+//เชื่อมต่อกับ mongo
 const MONGODB_URL = process.env.MONGODB_URL;
 mongoose.connect(MONGODB_URL);
 
+//ลองว่าเชื่อมต่อกับเซิฟเวอร์ได้ไหม
 app.get("/", (req, res) => {
-  res.send("<h1>Restful API For Se Shop</h1>");
+  res.send("This is a RESFUL");
 });
-//Add Router
-app.use("/products", productRouter);
-app.use("/carts", cartRouter);
 
-//Run server
+app.use("/products", productRouter);
+app.use("/cartitems", cartRouter);
+app.use("/users", userRouter);
+
+app.post("/jwt" , async (req, res) => {
+  const user = req.body;
+  const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET,
+    {expiresIn:"1h",
+  });
+  res.send({ token });
+});
+
 const PORT = process.env.PORT;
 const server = app.listen(PORT, () => {
-  console.log("Server is running on http://localhost:" + PORT);
+  console.log("server is running 0n http://localhost:" + PORT);
 });

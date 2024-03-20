@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { useContext, createContext, useState, useEffect } from "react";
 export const AuthContext = createContext();
 import app from "../firebase/firebase.config";
 import {
@@ -11,14 +11,18 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
+import useAxiosPublic from "../hook/useAxiosPublic";
+
 const AuthProvider = ({ children }) => {
   // Initialize Firebase Authentication and get a reference to the service
+  const axiosPublic = useAxiosPublic;
   const auth = getAuth(app);
   const [user, setUser] = useState(null);
   const [cartTrigger, setCartTrigger] = useState(0);
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
+
   const updateUserProfile = ({ name, photoURL }) => {
     return updateProfile(auth.currentUser, {
       displayName: name,
@@ -34,7 +38,7 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
-  const signUpWithGoogle = () => {
+  const signUpWhiteGoogle = () => {
     const provider = new GoogleAuthProvider();
     return signInWithPopup(auth, provider);
   };
@@ -45,22 +49,30 @@ const AuthProvider = ({ children }) => {
     createUser,
     login,
     logout,
-    signUpWithGoogle,
+    signUpWhiteGoogle,
     updateUserProfile,
     setCartTrigger,
     cartTrigger,
   };
-  //Check if user is Logged in
+
+  //check if user is logged in
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        setUser(currentUser);
+        const userInfo = { email: currentUser.email };
+        axiosPublic.post("/jwt", userInfo).then((response) => {
+          if (response.data.token) {
+            localStorage.setItem("access_token", response.data.token);
+          }
+        });
+      } else {
+        localStorage.removeItem("access_token");
       }
-      return () => {
-        return unsubscribe();
-      };
     });
+    return () => {
+      return unsubscribe();
+    };
   }, [auth]);
 
   return (

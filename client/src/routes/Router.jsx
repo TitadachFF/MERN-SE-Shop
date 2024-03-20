@@ -1,13 +1,13 @@
-import React from "react";
+import * as React from "react";
 import { createBrowserRouter } from "react-router-dom";
-import Main from "../layout/Main";
-import Home from "../pages/home/Home";
+import Main from "../Layout/Main";
+import Home from "../Pages/home/Home";
 import ProductList from "../pages/shop/ProductList";
-import SignIn from "../components/SignIn";
-import SignUp from "../components/SignUp";
-import UpdateProfile from "../pages/dashboard/UpdateProfile";
+import SignUp from "../Components/SignUp";
+import SignIn from "../Components/SignIn";
+import UpdateProfile from "../Pages/dashboard/updateProfile";
 import PrivateRouter from "../PrivateRouter/PrivateRouter";
-import Cart from "../components/Cart";
+import Cart from "../pages/shop/Cart";
 
 const router = createBrowserRouter([
   {
@@ -37,11 +37,11 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/signup",
+    path: "/singup",
     element: <SignUp />,
   },
   {
-    path: "/signin",
+    path: "/singin",
     element: <SignIn />,
   },
 ]);

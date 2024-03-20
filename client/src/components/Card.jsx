@@ -1,40 +1,61 @@
-import React, { useContext } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom"; // Added missing function calls
-import { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../context/AuthProvider";
 import axios from "axios";
+import useCart from "../hook/useCart";
+import useAxiosPublic from "../hook/useAxiosPublic";
 
 const Card = ({ item }) => {
+  const axiosPublic = useAxiosPublic();
   const { _id, name, image, price, description } = item;
-  const [isHeartFilled, setIsHeartFilled] = useState(false);
   const { user, cartTrigger, setCartTrigger } = useContext(AuthContext);
-  const navigate = useNavigate(); // Corrected function call
-  const location = useLocation(); // Corrected function call
+  const [cart, refetch] = useCart();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [isHeartFilled, setIsHeartFilled] = useState(false);
   const handleHeartClick = () => {
     setIsHeartFilled(!isHeartFilled);
   };
+
   const handleAddToCart = (item) => {
     if (user && user.email) {
       const cartItem = {
         productId: item._id,
         name: item.name,
         email: user.email,
-        price: item.price,
         image: item.image,
+        price: item.price,
         quantity: 1,
       };
-      axios.post("http://localhost:5000/carts", cartItem).then(() => {
-        Swal.fire({
-          title: "This product is Added",
-          timer: "700",
-          icon: "success",
+      axiosPublic
+        .post("/carts", cartItem)
+        .then((response) => {
+          if (response.status === 200 || response.status === 201) {
+            refetch();
+            Swal.fire({
+              title: "Product added on the cart",
+              position: "center",
+              icon: "success",
+              showConfirmButton: false,
+              timer: "2000",
+            });
+          }
+          // setCartTrigger(cartTrigger + 1);
+        })
+        .catch((error) => {
+          const errorMessage = error.response.data.message;
+          Swal.fire({
+            title: `${errorMessage}`,
+            position: "center",
+            icon: "warning",
+            showConfirmButton: false,
+            timer: "2000",
+          });
         });
-        setCartTrigger(cartTrigger + 1);
-      });
     } else {
       Swal.fire({
-        title: "Please login to add an item to your cart!",
+        title: "Plaease login to add an item to cart!",
         position: "center",
         icon: "warning",
         showCancelButton: true,
@@ -42,7 +63,6 @@ const Card = ({ item }) => {
         cancelButtonColor: "#d33",
         showConfirmButton: true,
         confirmButtonText: "Login now",
-        timer: "3000",
       }).then((result) => {
         if (result.isConfirmed) {
           navigate("/login", { state: { from: location } });
@@ -75,15 +95,19 @@ const Card = ({ item }) => {
           />
         </figure>
       </Link>
+
       <div className="card-body">
         <Link>
           <h2 className="card-title">{name}</h2>
         </Link>
         <p>{description}</p>
         <div className="card-action justify-between items-center mt-2 flex">
-          <h5 className="font-semibold">{price}</h5>
+          {" "}
+          <h5 className="font-semibold">
+            {price} <span className="text-sm text-red"> ฿ </span>
+          </h5>
           <button
-            className="btn bg-red text-white mt-2"
+            className="btn bg-red text-white"
             onClick={() => {
               handleAddToCart(item);
             }}
