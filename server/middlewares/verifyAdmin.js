@@ -1,13 +1,15 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/User.model");
+const jwt = require("jsonwebtoken")
+const User = require("../models/User.model")
 
-const verifyAdmin = async (req, res, next) => {
+const verifyAdmin = async(req,res,next)=>{
   const email = req.decoded.email;
-  const user = await User.findOne(email);
-  const isAdmin = user?.role === "admin";
+  const user = await User.findOne({
+    email
+  });
+  const isAdmin = user?.role === "admin"
   if (!isAdmin) {
-    res.status(403).send({ message: "Forbidden Access" });
+    return res.status(403).send({message:"Forbidden Access"});
   }
   next();
-};
+}
 module.exports = verifyAdmin;

@@ -6,9 +6,9 @@ const productRouter = require("./routes/product.router");
 const cartRouter = require("./routes/cart.router");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
-const cartRouter = require("./routes/cart.router");
 const userRouter = require("./routes/user.router");
 const jwt = require("jsonwebtoken");
+
 const swaggerDefinition = {
   openapi: "3.0.0",
   info: {
@@ -38,6 +38,7 @@ const swaggerDefinition = {
     },
   ],
 };
+
 const options = {
   swaggerDefinition,
   // Paths to files containing OpenAPI definitions
