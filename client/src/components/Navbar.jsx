@@ -5,6 +5,7 @@ import Profile from "./Profile";
 import Cart from "../pages/shop/Cart";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import useCart from "../hook/useCart";
 
 const NavBar = () => {
@@ -39,7 +40,7 @@ const NavBar = () => {
           <summary>Category</summary>
           <ul className="p-2">
             <li>
-              <a onClick={() => navigate("/Shop")}>All</a>
+              <a>All</a>
             </li>
             <li>
               <a>Clothing</a>
@@ -75,7 +76,7 @@ const NavBar = () => {
     </>
   );
   return (
-    <header className="max-w-screen-2xl container mx-auto fixed top-0 left-0 right-0 transition-all duration-300 ease-in-out">
+    <header className="max-w-screen-1xl container mx-auto fixed top-0 left-0 right-0 transition-all duration-300 ease-in-out navbar z-50">
       <div className="navbar xl:px">
         <div className="navbar bg-base-100 rounded-md">
           <div className="navbar-start">
@@ -107,7 +108,7 @@ const NavBar = () => {
                 {navItems}
               </ul>
             </div>
-            <a className="btn btn-ghost text-xl" href="/">
+            <a className="btn btn-ghost text-xl">
               <img src="/logo.png" alt="" className="h-12 pr-1 mx-auto" />
               <span className="text-red">SE Souvenir Shop</span>
             </a>
@@ -115,6 +116,7 @@ const NavBar = () => {
           <div className="navbar-center hidden lg:flex">
             <ul className="menu menu-horizontal px-1">{navItems}</ul>
           </div>
+
           <div className="navbar-end">
             <button className="btn btn-ghost btn-circle hidden lg:flex mr-3 items-center justify-center">
               <svg
@@ -136,27 +138,28 @@ const NavBar = () => {
               tabIndex={0}
               role="button"
               className="btn btn-ghost btn-circle hidden lg:flex mr-3 items-center justify-center"
-              onClick={() => navigate("/Cart")}
             >
-              <div className="indicator">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-                <span className="badge badge-sm indicator-item">
-                  {cart.length || 0}
-                </span>
-              </div>
+              <Link to={"/Cart"}>
+                <div className="indicator">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                    />
+                  </svg>
+                  <span className="badge badge-sm indicator-item">
+                    {cart.length || 0}
+                  </span>
+                </div>
+              </Link>
             </div>
             {user ? (
               <>
@@ -183,7 +186,7 @@ const NavBar = () => {
               </button>
             )}
           </div>
-          <Modal name="login" />
+          <Modal nameModal="login" />
         </div>
       </div>
     </header>

@@ -3,13 +3,15 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { FaFacebook, FaGoogle, FaGithub } from "react-icons/fa";
 import { AuthContext } from "../context/AuthProvider";
+import useAxiosPublic from "../hook/useAxiosPublic";
+import useAuth from "../hook/useAuth";
 
-const Modal = ({ name }) => {
-  const { login, signUpWithGoogle } = useContext(AuthContext);
+const Modal = ({ nameModal }) => {
+  const { login, signUpWithGoogle } = useAuth();
+  const axiosPublic = useAxiosPublic();
   const location = useLocation();
   const navigate = useNavigate();
-  const from =  "/shop";
-
+  const from = location?.state?.from?.pathname || "/";
   const {
     register,
     handleSubmit,
@@ -18,37 +20,58 @@ const Modal = ({ name }) => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
     login(data.email, data.password)
       .then((result) => {
         const user = result.user;
-        // console.log(user);
-        alert("Login Successful");
-        document.getElementById(name).close();
+        //console.log(user);
+        Swal.fire({
+          title: "Login Successfully",
+          icon: "success",
+          timer: 1500,
+        });
+        document.getElementById(nameModal).close();
         navigate(from, { replace: true });
       })
       .catch((error) => {
-        console.log(error);
+        document.getElementById(nameModal).close();
+        Swal.fire({
+          title: "Can not sign in please try again",
+          icon: "error",
+        });
       });
   };
+
   const googleSignUp = () => {
     signUpWithGoogle()
       .then((result) => {
         const user = result.user;
-        console.log(user);
-        alert("Google SingUp Successfully");
+        const userInfo = {
+          name: result.user?.displayName,
+          email: result.email,
+          photoURL: result.user?.photoURL,
+        };
+        axiosPublic.post("/users", userInfo).then((response) => {
+          //console.log(response);
+          Swal.fire({
+            title: "Google sing Up Successfully",
+            icon: "success",
+            timer: 1500,
+          });
+        });
+        //alert("Account creted Successfilly");
+        navigate(from, { replace: true });
+        //alert("Google SigUp Successfully");
         document.getElementById("login").close();
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
   return (
     <div>
-      {/* Open the modal using document.getElementById('ID').showModal() method */}
-
       <dialog
-        id={name}
+        id={nameModal}
         className="modal modal-bottom sm:modal-middle text-black"
       >
         <div className="modal-box">
@@ -85,7 +108,7 @@ const Modal = ({ name }) => {
                   </a>
                 </label>
               </div>
-              <div className="form-control mt-6 ">
+              <div className="form-control mt-6">
                 <input
                   type="submit"
                   value="Login"
@@ -99,15 +122,15 @@ const Modal = ({ name }) => {
                 </Link>
               </p>
               <button
-                htmlFor={name}
+                htmlFor={nameModal}
                 className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                onClick={() => document.getElementById(name).close()}
+                onClick={() => document.getElementById(nameModal).close()}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
-                  className="w-6 h-6 text-red "
+                  className="w-6 h-6"
                 >
                   <path
                     fillRule="evenodd"
@@ -117,7 +140,7 @@ const Modal = ({ name }) => {
                 </svg>
               </button>
             </form>
-            <div className="text-center space-x-3 mb-5">
+            <div className="text-center space-x-3 md-3">
               <button
                 className="btn btn-ghost btn-circle hover:bg-red hover:text-white"
                 onClick={googleSignUp}

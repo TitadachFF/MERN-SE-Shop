@@ -3,13 +3,15 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { FaFacebook, FaGoogle, FaGithub } from "react-icons/fa";
 import { AuthContext } from "../context/AuthProvider";
+import useAxiosPublic from "../hook/useAxiosPublic";
+import useAuth from "../hook/useAuth";
 
-const SignIn = ({ name }) => {
-  const { login, signUpWithGoogle } = useContext(AuthContext);
+const SignIn = (name) => {
+  const { login, signUpWithGoogle } = useAuth();
+  const axiosPublic = useAxiosPublic();
   const location = useLocation();
   const navigate = useNavigate();
-  const from = "/shop";
-
+  const from = location?.state?.from?.pathname || "/";
   const {
     register,
     handleSubmit,
@@ -18,33 +20,52 @@ const SignIn = ({ name }) => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
     login(data.email, data.password)
       .then((result) => {
         const user = result.user;
-        // console.log(user);
+        //console.log(user);
         alert("Login Successful");
         navigate(from, { replace: true });
       })
       .catch((error) => {
-        console.log(error);
+        document.getElementById(nameModal).close();
+        Swal.fire({
+          title: "Can not sign in please try again",
+          icon: "error",
+        });
       });
   };
+
   const googleSignUp = () => {
     signUpWithGoogle()
       .then((result) => {
         const user = result.user;
-        console.log(user);
-        alert("Google SingUp Successfully");
+        const userInfo = {
+          name: result.user?.displayName,
+          email: result.email,
+          photoURL: result.user?.photoURL,
+        };
+        axiosPublic.post("/users", userInfo).then((response) => {
+          //console.log(response);
+          Swal.fire({
+            title: "Google sing Up Successfully",
+            icon: "success",
+            timer: 1500,
+          });
+        });
+        //alert("Account creted Successfilly");
+        navigate(from, { replace: true });
+        //alert("Google SigUp Successfully");
         document.getElementById("login").close();
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
   return (
     <div>
-      <div className="max-w-md bg-white shadow w-full mx-auto flex items-center justify-center my-20">
+      <div className="max-w-md bg-white shadow-2xl w-full mx-auto flex items-center justify-center my-20">
         <div className="modal-action mt-0 flex flex-col justify-center">
           <h3 className="font-bold text-lg text-center ">Please Login</h3>
 
@@ -78,7 +99,7 @@ const SignIn = ({ name }) => {
                 </a>
               </label>
             </div>
-            <div className="form-control mt-6 ">
+            <div className="form-control mt-6">
               <input
                 type="submit"
                 value="Login"
@@ -87,7 +108,7 @@ const SignIn = ({ name }) => {
             </div>
             <p className="text-center my-2">
               Don't have an account?{" "}
-              <Link to={"/signup"} className="underline text-red ml-1">
+              <Link to={"/singup"} className="underline text-red ml-1">
                 Sign Up Now
               </Link>
             </p>
@@ -100,7 +121,7 @@ const SignIn = ({ name }) => {
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="w-6 h-6 text-red "
+                className="w-6 h-6"
               >
                 <path
                   fillRule="evenodd"
@@ -110,7 +131,7 @@ const SignIn = ({ name }) => {
               </svg>
             </button>
           </form>
-          <div className="text-center space-x-3 mb-5">
+          <div className="text-center space-x-3 md-3">
             <button
               className="btn btn-ghost btn-circle hover:bg-red hover:text-white"
               onClick={googleSignUp}

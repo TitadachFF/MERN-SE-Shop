@@ -38,7 +38,7 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
-  const signUpWhiteGoogle = () => {
+  const signUpWithGoogle = () => {
     const provider = new GoogleAuthProvider();
     return signInWithPopup(auth, provider);
   };
@@ -49,7 +49,7 @@ const AuthProvider = ({ children }) => {
     createUser,
     login,
     logout,
-    signUpWhiteGoogle,
+    signUpWithGoogle,
     updateUserProfile,
     setCartTrigger,
     cartTrigger,
